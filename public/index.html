@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Birdy</title>
+  <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
+  <link href='http://fonts.googleapis.com/css?family=Satisfy|Droid+Sans' rel='stylesheet' type='text/css'>
+
+  <link href="/css/styles.css" rel="stylesheet">  
+</head>
+<body>
+
+  <header>
+    <h1>birdy</h1>
+    <p>a real-time stream<br>of the twitterverse</p>
+  </header>
+
+  <section id="main">
+    <div id="content">
+      <ol>
+        <li id="sign_in">
+          <a href="/connect" class="button block">Sign In with Twitter</a>
+        </li>
+        <li id="search">
+          <h2>Howdy, <span id="screen_name">danielleswank</span>. Enjoy the Twitterverse</h2>
+          <ul id="search_box">
+            <li id="search_input"><input type="text" placeholder="search..."></li>
+          </ul>
+        </li>
+        <li id="see_tweets">
+          <ul id="tweets"></ul>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- TWEET TEMPLATE -->
+  <script type="text/template" id="tweet-template">
+    <li class="tweet">
+      <img src="<%= user.profile_image_url %>" />
+      <p class="message"><%= text %></p>
+      <p class="date_time"><%= created_at %></p>
+    </li>
+  </script>
+
+  <!-- SEARCH TEMPLATE -->
+  <script type="text/template" id="search-item-template">
+    <a href="#toggle" class="toggle"><%= text %></a>
+    <a href="#remove" class="remove">x</a>
+  </script>
+  
+  <!-- JAVASCRIPT FILES -->
+  <script src="/scripts/deps/jquery.js"></script>
+  <script src="/scripts/deps/underscore.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/scripts/main.js"></script>
+  
+</body>
+</html>

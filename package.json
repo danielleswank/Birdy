@@ -1,0 +1,14 @@
+{
+  "name": "birdy",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "coffee app.coffee"
+  },
+  "dependencies": {
+    "coffee-script": "*",
+    "oauth": "*",
+    "express": "*",
+    "socket.io": "*",
+    "underscore": "*"
+  }
+}
