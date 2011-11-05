@@ -88,7 +88,7 @@ $ ->
       
   add_tag = (text) ->
     tag = {}
-    tag.text = text
+    tag.text = text = text.replace(/^\s+|\s+$/g)
     
     if (/^(\+|\-)?(\d+(\.\d+)?)(?:,)(\+|\-)?(\d+(\.\d+)?)$/.exec(text))
       tag.type = 'flag'
@@ -107,12 +107,17 @@ $ ->
     
     $tag.find('.remove').bind 'click', (e) ->
       remove_tag(text, false)
-      socket.emit('search', track: track.join(' '), location: build_locations(location))
+      socket.emit('search', track: track.join(' ').replace(/\s+/g, ' ').replace(/^\s+|\s+$/, ''), location: build_locations(location))
       
     $tag.find('.toggle').bind 'click', (e) ->
+      if $tag.hasClass('inactive')
+        track.push(text)
+      else
+        remove_tag(text, true)
+        
       $tag.toggleClass('inactive')
-      remove_tag(text, true)
-      socket.emit('search', track: track.join(' '), location: build_locations(location))
+      
+      socket.emit('search', track: track.join(' ').replace(/\s+/g, ' ').replace(/^\s+|\s+$/, ''), location: build_locations(location))
      
     $search_last.before(tag_el)
     return ''
@@ -148,7 +153,7 @@ $ ->
     
     if e.keyCode is 8 and e.target.value is '' then e.target.value = remove_tag(text, false) 
     if e.keyCode in [9, 13, 32] then e.target.value = add_tag(text)
-    if e.keyCode is 13 then socket.emit('search', track: track.join(' '), location: build_locations(location))
+    if e.keyCode is 13 then socket.emit('search', track: track.join(' ').replace(/\s+/g, ' ').replace(/^\s+|\s+$/, ''), location: build_locations(location))
     
     
   $search_input.bind 'blur', (e) ->

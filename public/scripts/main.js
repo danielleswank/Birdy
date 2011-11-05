@@ -52,21 +52,13 @@
     $search_input = $('#search_input');
     $search_last = $('#search_box li:last-child');
     socket = io.connect();
-    socket.on('connect', function() {
-      return console.log('connect');
-    });
     socket.on('tweet', function(tweet) {
-      console.log(tweet);
       $tweets.prepend(tweet_template(tweet));
       if ($tweets.length >= 140) {
         return $tweets.filter(':gt(139)').remove();
       }
     });
-    socket.on('error', function(err) {
-      return console.error(err);
-    });
     socket.on('screen_name', function(screen_name) {
-      console.log(screen_name);
       $('#sign_in').hide(100);
       $('#search, #see_tweets').show(100);
       return $('#screen_name').text(screen_name);
@@ -78,7 +70,6 @@
       locations_all = _.reduce(locations, function(locations_all, location) {
         return locations_all.concat(location);
       }, []);
-      console.log(locations_all);
       if (locations_all.length) {
         return locations_all;
       } else {
@@ -88,13 +79,11 @@
     add_tag = function(text) {
       var $tag, bounding_box, lat, lng, tag, tag_el, _ref;
       tag = {};
-      tag.text = text;
+      tag.text = text = text.replace(/^\s+|\s+$/g);
       if (/^(\+|\-)?(\d+(\.\d+)?)(?:,)(\+|\-)?(\d+(\.\d+)?)$/.exec(text)) {
         tag.type = 'flag';
         _ref = tag.text.split(','), lat = _ref[0], lng = _ref[1];
-        console.log(lat, lng);
         bounding_box = get_bounding_box(lat, lng, 25);
-        console.log(bounding_box);
         location[text] = bounding_box;
       } else {
         tag.type = /^@[A-Z0-9.-]+/i.exec(text) ? 'user' : 'tag';
@@ -105,19 +94,21 @@
       tag_el.innerHTML = tag_template(tag);
       $tag = $(tag_el);
       $tag.find('.remove').bind('click', function(e) {
-        console.log('remove');
         remove_tag(text, false);
         return socket.emit('search', {
-          track: track.join(' '),
+          track: track.join(' ').replace(/\s+/g, ' ').replace(/^\s+|\s+$/, ''),
           location: build_locations(location)
         });
       });
       $tag.find('.toggle').bind('click', function(e) {
-        console.log('toggle');
+        if ($tag.hasClass('inactive')) {
+          track.push(text);
+        } else {
+          remove_tag(text, true);
+        }
         $tag.toggleClass('inactive');
-        remove_tag(text, true);
         return socket.emit('search', {
-          track: track.join(' '),
+          track: track.join(' ').replace(/\s+/g, ' ').replace(/^\s+|\s+$/, ''),
           location: build_locations(location)
         });
       });
@@ -158,7 +149,7 @@
       }
       if (e.keyCode === 13) {
         return socket.emit('search', {
-          track: track.join(' '),
+          track: track.join(' ').replace(/\s+/g, ' ').replace(/^\s+|\s+$/, ''),
           location: build_locations(location)
         });
       }

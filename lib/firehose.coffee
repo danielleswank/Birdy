@@ -57,7 +57,7 @@ class exports.Firehose extends EventEmitter
 
     return unless options
 
-    # @response?.socket.end()
+    @response?.socket.end()
 
     request = https.request options, (@response) =>
       if response.statusCode isnt 200
@@ -95,4 +95,4 @@ class exports.Firehose extends EventEmitter
     request.end(qs.stringify(body))
     
   kill: ->
-    @response.socket.end()
+    @response?.socket.end()
