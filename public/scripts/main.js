@@ -37,7 +37,7 @@
       lon1 = east_deg;
       lon2 = west_deg;
     }
-    return [lat1, lat2, lon1, lon2];
+    return [lat1, lon1, lat2, lon2];
   };
   parse_message = function(message) {
     return message = message.replace(/\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/gi, '<a href="$&">$&</a>').replace(/(^|\s)(@([a-z0-9_]+))/gi, '$1<a href="https://twitter.com/$3">$2</a>').replace(/(^|\s)(#([a-z0-9_]+))/gi, function($0, $1, $2, $3) {
@@ -86,13 +86,16 @@
       }
     };
     add_tag = function(text) {
-      var $tag, lat, lng, tag, tag_el, _ref;
+      var $tag, bounding_box, lat, lng, tag, tag_el, _ref;
       tag = {};
       tag.text = text;
       if (/^(\+|\-)?(\d+(\.\d+)?)(?:,)(\+|\-)?(\d+(\.\d+)?)$/.exec(text)) {
         tag.type = 'flag';
         _ref = tag.text.split(','), lat = _ref[0], lng = _ref[1];
-        location[text] = get_bounding_box(lat, lng, 25);
+        console.log(lat, lng);
+        bounding_box = get_bounding_box(lat, lng, 25);
+        console.log(bounding_box);
+        location[text] = bounding_box;
       } else {
         tag.type = /^@[A-Z0-9.-]+/i.exec(text) ? 'user' : 'tag';
         track.push(text);

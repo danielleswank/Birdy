@@ -131,8 +131,6 @@ input[type="text"] {
 .button:hover { background-color: #007d9a; color: #fff; }
 .button:active { top: 1px; }
 
-#search_box .inactive .search_item { background: #aaa; }
-#search_box .inactive .remove { background: #999; }
 
 #search_box .remove, #search_box .remove:visited { 
   color: #FFF;
@@ -154,5 +152,7 @@ input[type="text"] {
   font-weight: bold;
 }
 .search_item:hover { background-color: #007d9a; }
-.user { background-image: url(/images/user.png); background-position-y: 9px;}
-.flag { background-image: url(/images/flag.png); background-position-y: 5px;}
+#search_box .search_item.user { background-image: url(/images/user.png); background-position-y: 9px;}
+#search_box .search_item.flag { background-image: url(/images/flag.png); background-position-y: 5px;}
+#search_box .inactive.search_item { background: #aaa; }
+#search_box .inactive .remove { background: #999; }

@@ -61,4 +61,8 @@ exports.connection = (socket) ->
 
     socket.on 'search', (query) ->
       console.log query
-      firehose.request(query)
+      firehose.request(query) if query?.track?.replace(/^\s+|\s+$/)
+
+    socket.on 'disconnect', ->
+      console.log 'dying...'
+      firehose.kill()

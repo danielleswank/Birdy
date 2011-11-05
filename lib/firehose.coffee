@@ -93,3 +93,6 @@ class exports.Firehose extends EventEmitter
       @emit('error', err)
 
     request.end(qs.stringify(body))
+    
+  kill: ->
+    @response.socket.end()

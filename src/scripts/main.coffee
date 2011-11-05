@@ -48,7 +48,7 @@ get_bounding_box = (lat_deg, lon_deg, distance_miles) ->
       lon1 = east_deg
       lon2 = west_deg
 
-    return [lat1, lat2, lon1, lon2]
+    return [lat1, lon1, lat2, lon2]
 
 parse_message = (message) ->
   message = message.replace(/\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/gi, '<a href="$&">$&</a>')
@@ -67,19 +67,11 @@ $ ->
   
   socket = io.connect()
 
-  socket.on 'connect', ->
-    console.log 'connect'
-
   socket.on 'tweet', (tweet) ->
-    console.log tweet
     $tweets.prepend(tweet_template(tweet))
     $tweets.filter(':gt(139)').remove() if $tweets.length >= 140
     
-  socket.on 'error', (err) ->
-    console.error err
-    
   socket.on 'screen_name', (screen_name) ->
-    console.log screen_name
     $('#sign_in').hide(100)
     $('#search, #see_tweets').show(100)
     $('#screen_name').text(screen_name)
@@ -92,7 +84,6 @@ $ ->
     locations_all = _.reduce locations, (locations_all, location) ->
       return locations_all.concat(location)
     , []
-    console.log locations_all
     return if locations_all.length then locations_all else ''
       
   add_tag = (text) ->
@@ -102,7 +93,8 @@ $ ->
     if (/^(\+|\-)?(\d+(\.\d+)?)(?:,)(\+|\-)?(\d+(\.\d+)?)$/.exec(text))
       tag.type = 'flag'
       [lat, lng] = tag.text.split(',')
-      location[text] = get_bounding_box(lat, lng, 25)
+      bounding_box = get_bounding_box(lat, lng, 25)
+      location[text] = bounding_box
     else
       tag.type = if /^@[A-Z0-9.-]+/i.exec(text) then 'user' else 'tag'
       track.push(text)
@@ -114,12 +106,10 @@ $ ->
     $tag = $(tag_el)
     
     $tag.find('.remove').bind 'click', (e) ->
-      console.log 'remove'
       remove_tag(text, false)
       socket.emit('search', track: track.join(' '), location: build_locations(location))
       
     $tag.find('.toggle').bind 'click', (e) ->
-      console.log 'toggle'
       $tag.toggleClass('inactive')
       remove_tag(text, true)
       socket.emit('search', track: track.join(' '), location: build_locations(location))
