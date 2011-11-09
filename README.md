@@ -6,7 +6,6 @@ Best viewed in Chrome.
 Files can be found at https://github.com/danielleswank/Birdy
 
 These instructions assume that you have node installed.   
-Since you're a node shop I hope that is a safe assumption.  
 If you don't have it installed, here are a few good installation instruction links:
 https://github.com/joyent/node/wiki/Installation
 https://gist.github.com/579814
@@ -24,8 +23,8 @@ https://gist.github.com/579814
 
 Things to know:
 The stream is throttled, otherwise it was just scrolled too fast for popular terms.  
-Searches are additive so OWS + BASEBALL probably won't have may results even though they will seperatly.  
-You can toggle on and off search terms or remove them compleatly.
+Searches are additive so OWS + BASEBALL probably won't have may results even though they will separately.  
+You can toggle on and off search terms or remove them completely.
 Try backspacing once you have a few terms in.
 Lat,Long searches can't have a space after the comma. If they do they will be treated as a keyword (e.g. -36.34,85.23)
 
